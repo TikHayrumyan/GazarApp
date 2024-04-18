@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "Comet",
+    "slug": "Comet",
+    "scheme":"Comet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tikhayrumyan.comet",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.316385471831-qvptaifkd5kr4v9t2mckf2o8ojc57vpr"
+            ]
+          }
+        ]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.tikhayrumyan.comet"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "clerkPublishableKey": "pk_test_ZGlyZWN0LXF1ZXR6YWwtNDIuY2xlcmsuYWNjb3VudHMuZGV2JA",
+      "eas": {
+        "projectId": "3ac0d9a9-a570-4d49-874f-a46c669597ee"
+      },
+      "oneSignalAppId": "d42a63fc-b88b-44fc-952e-8420bce38d74"
+    },
+    "plugins": [
+      "expo-localization",
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "development"
+        }
+      ]
+    ]
+  }
+}

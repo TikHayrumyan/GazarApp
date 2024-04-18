@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "414209840152",
+    "project_id": "gazarapp-74d8e",
+    "storage_bucket": "gazarapp-74d8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414209840152:android:600dd842b4ca2e12ca9f6d",
+        "android_client_info": {
+          "package_name": "com.tikhayrumyan.comet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPubMYvqp9gaTtvlsgx2uapwvNMRS7-ZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
