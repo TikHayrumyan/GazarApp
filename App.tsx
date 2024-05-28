@@ -44,11 +44,14 @@ i18n
     },
   });
 
-const App = () => {
-   
+  
+  OneSignal.initialize("d42a63fc-b88b-44fc-952e-8420bce38d74");
   // OneSignal.Debug.setLogLevel(LogLevel.Verbose);
-  // OneSignal.initialize("21c218da-8889-404a-8b59-9cc93d0c6d4f");
   // OneSignal.Notifications.requestPermission(true);
+
+  const App = () => {
+   
+  // OneSignal.initialize("d42a63fc-b88b-44fc-952e-8420bce38d74");
   // OneSignal.Notifications.addEventListener('click', (event) => {
   //   console.log('OneSignal: notification clicked:', event);
   // });

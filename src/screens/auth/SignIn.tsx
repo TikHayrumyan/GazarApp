@@ -21,8 +21,8 @@ import Button from '../../components/buttons/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 WebBrowser.maybeCompleteAuthSession();
-
 const SignIn: React.FC = () => {
+  
   const [error, setError] = useState();
   const [user, setUser] = React.useState(null);
   const navigation = useAppNavigation();
@@ -41,9 +41,10 @@ const SignIn: React.FC = () => {
         '316385471831-q7opk0d3ohnrgqfisoink7k90q75l701.apps.googleusercontent.com',
       iosClientId:
         '316385471831-qvptaifkd5kr4v9t2mckf2o8ojc57vpr.apps.googleusercontent.com',
-    },{
-      projectNameForProxy: "@owner/slug"
     }
+    // ,{
+    //   projectNameForProxy: "@owner/slug"
+    // }
   );
   
   
