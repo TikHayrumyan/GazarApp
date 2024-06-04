@@ -28,8 +28,8 @@ const OrderItem: React.FC<Props> = ({
   const marginBottom = lastElement ? 30 : 14;
 
   const TIncrement = () => {
-    // dispatch(increment(index as any));
-    dispatch(resetCart())
+    dispatch(increment(index as any));
+    // dispatch(resetCart())
   };
   const TDecrement = () => {
     dispatch(decrement(index as any));

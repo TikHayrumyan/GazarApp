@@ -22,7 +22,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 WebBrowser.maybeCompleteAuthSession();
 const SignIn: React.FC = () => {
-  
   const [error, setError] = useState();
   const [user, setUser] = React.useState(null);
   const navigation = useAppNavigation();
@@ -41,26 +40,40 @@ const SignIn: React.FC = () => {
         '316385471831-q7opk0d3ohnrgqfisoink7k90q75l701.apps.googleusercontent.com',
       iosClientId:
         '316385471831-qvptaifkd5kr4v9t2mckf2o8ojc57vpr.apps.googleusercontent.com',
-    }
+    },
     // ,{
     //   projectNameForProxy: "@owner/slug"
     // }
   );
-  
-  
+
   const _retrieveData = async () => {
     try {
       const asyncUser = await AsyncStorage.getItem('user');
+
       if (asyncUser !== null) {
+        let User = JSON.parse(asyncUser);
+        try {
+          const response = await fetch(
+            `https://gazar.am/api/userId?email=${User.email}`,
+          );
+
+          const res = await response.json();
+          if (res) {
+            await AsyncStorage.setItem('userDbId', JSON.stringify(res.id));
+          }
+        } catch (error) {
+          console.error(error);
+        }
+
         dispatch(setScreen('Home'));
         navigation.navigate('TabNavigator');
+        // navigation.navigate('SuccessOrder')
       }
     } catch (error) {
       // Error retrieving data
     }
   };
-  // dispatch(setScreen('Home'));
-  // navigation.navigate('TabNavigator');
+  
   React.useEffect(() => {
     _retrieveData();
   }, []);

@@ -68,6 +68,7 @@ i18n
           </NavigationContainer>
         </PersistGate>
       </Provider>
+      
       <FlashMessage position='top' floating={true} />
     </SafeAreaProvider>
   );

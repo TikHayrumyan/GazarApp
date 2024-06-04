@@ -91,6 +91,8 @@ const ShopItem: React.FC<Props> = ({item, index, increment, decrement}): JSX.Ele
        
         dispatch(AddToBasket(item))
         // dispatch(resetCart())
+        console.log(item);
+        
         
       }}/>
     </TouchableOpacity>

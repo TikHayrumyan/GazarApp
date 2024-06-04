@@ -1,38 +1,15 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 
 import {theme} from '../../constants';
 import {text} from '../../text';
 
 type Props = {
-  section: {
-    number: number;
-    total: number;
-    status: string;
-    date: string;
-  };
+  data: any;
 };
 
-const HistoryDataHeader: React.FC<Props> = ({section}) => {
-  const renderStatusColor = () => {
-    if (section.status === 'Shipping') {
-      return '#FFA462';
-    } else if (section.status === 'Delivered') {
-      return '#00824B';
-    } else if (section.status === 'Canceled') {
-      return '#F84C6B';
-    }
-  };
-
-  const renderStatusText = () => {
-    if (section.status === 'Shipping') {
-      return 'Shipping';
-    } else if (section.status === 'Delivered') {
-      return 'Delivered';
-    } else if (section.status === 'Canceled') {
-      return 'Canceled';
-    }
-  };
+const HistoryDataHeader: React.FC<Props> = ({data}) => {
+  const [DateOrder, setDateOrder] = useState<any>(data.date);
 
   return (
     <View
@@ -44,6 +21,9 @@ const HistoryDataHeader: React.FC<Props> = ({section}) => {
         marginLeft: 20,
       }}
     >
+      
+      <View>
+      
       <View
         style={{
           flexDirection: 'row',
@@ -52,8 +32,8 @@ const HistoryDataHeader: React.FC<Props> = ({section}) => {
           marginBottom: 8,
         }}
       >
-        <text.H5>#{section.number}</text.H5>
-        <text.H5>#{section.total}</text.H5>
+        <text.H5>{data?.address}</text.H5>
+        <text.H5>{data?.totalPrice}֏</text.H5>
       </View>
       <View
         style={{
@@ -66,22 +46,20 @@ const HistoryDataHeader: React.FC<Props> = ({section}) => {
           style={{
             fontSize: 12,
             lineHeight: 12 * 1.5,
-            color: renderStatusColor(),
-            // ...theme.fonts.DMSans_400Regular,
+            // color: renderStatusColor(),
           }}
         >
-          {renderStatusText()}
         </Text>
         <Text
           style={{
             fontSize: 12,
             lineHeight: 12 * 1.5,
-            // ...theme.fonts.DMSans_400Regular,
             color: theme.colors.textColor,
           }}
         >
-          {section.date}
-        </Text>
+          {new Date(DateOrder).toLocaleString()}
+        </Text> 
+       </View>
       </View>
     </View>
   );

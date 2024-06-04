@@ -21,6 +21,7 @@ const InCart: React.FC<Props> = ({item, containerStyle}): JSX.Element => {
   const [Item, setItem] = useState(item);
   const cart = useAppSelector((state) => state.cart.list);
   const exist = (item: any) => cart.find((i: any) => i.id === item.id);
+  
   const increment = () => {
     let temp = {...Item};
     if (temp.maxLimit > temp.quantity) {

@@ -27,7 +27,7 @@ import VerifyYourPhoneNumber from './VerifyYourPhoneNumber';
 import ForgotPasswordSentEmail from './ForgotPasswordSentEmail';
 import TopCategories from './TopCategories';
 import Wishlist from './tabs/Wishlist';
-
+import SuccessOrder from './SuccessOrder'
 // Tabs
 import Home from './tabs/Home';
 import Categories from './tabs/Categories';
@@ -70,4 +70,5 @@ export const screens = {
   AddANewCard,
   Filter,
   TopCategories,
+  SuccessOrder
 };

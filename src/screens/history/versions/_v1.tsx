@@ -5,26 +5,27 @@ import Accordion from 'react-native-collapsible/Accordion';
 import {components} from '../../../components';
 import {history} from '../../../constants';
 
-const _v1 = () => {
-  const [activeSections, setActiveSections] = useState<number[]>([]);
-  const setSections = (sections: any) => {
-    setActiveSections(sections.includes(undefined) ? [] : sections);
+const _v1 = ({data}:{data:any}) => {
+  const [activeSections, setActiveSections] = useState<any[]>([]);
+  const setSections = (data: any) => {
+    setActiveSections(data.includes(undefined) ? [] : data);
   };
-
+ 
   const contentStyles = {
     paddingRight: 20,
     marginLeft: 20,
   };
 
-  const accordionHeader = (section: any) => {
-    return <components.HistoryDataHeader section={section} />;
+  const accordionHeader = (data: any) => {
+    
+    return <components.HistoryDataHeader data={data} />;
   };
 
-  const accordionContent = (section: object) => {
+  const accordionContent = (data: object) => {
     return (
       <View style={{...contentStyles}}>
-        <components.ContainerData type='history' section={section} />
-        <components.HistoryDataFooter version={1} />
+        <components.ContainerData type='history' data={data} />
+        {/* <components.HistoryDataFooter version={1} /> */}
       </View>
     );
   };
@@ -33,13 +34,14 @@ const _v1 = () => {
     return (
       <Accordion
         activeSections={activeSections}
-        sections={history}
+        sections={data}
         touchableComponent={TouchableOpacity}
         renderHeader={accordionHeader}
         renderContent={accordionContent}
         duration={400}
         onChange={setSections}
       />
+      
     );
   };
 

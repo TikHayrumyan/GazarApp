@@ -159,6 +159,11 @@ const StackNavigator = () => {
         component={screens.TopCategories}
         options={{headerShown: false}}
       />
+      <RootStack.Screen
+        name='SuccessOrder'
+        component={screens.SuccessOrder}
+        options={{headerShown: false}}
+      />
     </RootStack.Navigator>
   );
 };

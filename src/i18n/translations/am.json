@@ -34,5 +34,6 @@
     "CompanyName":"Կազմակերպության անվանումը",
     "CompanyTin":"Կազմակերպության ՀՎՀՀ",
     "Notes":"Նշումներ",
-    "ConfirmOrder":"Հաստատել պատվերը"
+    "ConfirmOrder":"Հաստատել պատվերը",
+    "goToHomePage": "Գլխավոր"
 }

@@ -6,16 +6,20 @@ import {svg} from '../assets/svg';
 import {theme} from '../constants';
 // import {payments} from '../constants';
 import {addresses} from '../constants';
-import {useAppSelector} from '../hooks';
+import {useAppDispatch, useAppSelector} from '../hooks';
 import {components} from '../components';
 import {useAppNavigation} from '../hooks';
 import PhoneInput from 'react-native-phone-input';
 import Button from '../components/buttons/Button';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { resetCart } from '../store/slices/cartSlice';
+import { setScreen } from '../store/slices/tabSlice';
 
 const Checkout = ({route}: {route: any}): JSX.Element => {
-  const {t} = useTranslation()
+  const {t} = useTranslation();
+ 
 
   const payments = [
     {
@@ -44,13 +48,13 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
       name: `${t('Idram')}`,
     },
   ];
-  
+
   const navigation = useAppNavigation();
   const date = new Date();
   const [shippingModal, setShippingModal] = useState(false);
   const [paymentModal, setPaymentModal] = useState(false);
   // const [address, setAddress] = useState(addresses[0].address);
-  const [payment, setPayment] = useState(payments[0].name);
+  const [payment, setPayment] = useState(payments[0].type);
   const [username, setUsername] = useState<string>('');
   const [surname, setSurname] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -66,6 +70,27 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
   const discount = useAppSelector((state) => state.cart.discount)?.toFixed(2);
   const [timeData, settimeData] = useState<any[]>();
   const [TimeId, setTimeId] = useState<any[]>();
+  const [UserInfo, setUserInfo] = useState<any>(null);
+  const [UserInfoIdFromDb, setUserInfoIdFromDb] = useState<any>(null);
+  const dispatch = useAppDispatch();
+ 
+ 
+  const _retrieveData = async () => {
+    try {
+      const asyncUser = await AsyncStorage.getItem('user');
+      const asyncUserId = await AsyncStorage.getItem('userDbId');
+      if (asyncUser !== null && asyncUserId !== null) {
+        setUserInfoIdFromDb(JSON.parse(asyncUserId))
+        setUserInfo(JSON.parse(asyncUser));
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+  useEffect(() => {
+    _retrieveData();
+  }, []);
+
   const GetTimeDelivery = async () => {
     try {
       const response = await fetch('https://gazar.am/api/time');
@@ -96,45 +121,51 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
   const renderHeader = () => {
     return <components.Header title='Checkout' goBack={true} />;
   };
-
+  
   const CreateOrder = async () => {
     try {
-        const response = await fetch('https://gazar.am/api/orderCreate', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: username,
-                lastName: surname,
-                phone: phone,
-                address: ShippingAddress,
-                bank: payment,
-                date: `${selectedDate.toLocaleDateString()}`,
-                time: TimeId,
-                userId: 'cloy3dqfj0000v4ow54hxtv57',
-                companyTin: CompanyTin,
-                companyName: CompanyName,
-                basketIdWeight: JSON.stringify(cart.cart),
-                note: Notes,
-                timenow: `${date.toLocaleDateString() + " " + date.toLocaleTimeString()}`,
-            }),
-        });
-        
-        // Check if the response is successful
-        if (response.ok) {
-            const data = await response.json(); // Convert response to JSON
-            console.log('Order created successfully:', data);
-        } else {
-            // If response is not successful, log the error status
-            console.error('Error creating order:', response.status);
-        }
+      const data = {
+        name: username,
+        lastName: surname,
+        phone: phone,
+        address: ShippingAddress,
+        bank: payment.toUpperCase(),
+        date: `${selectedDate.toISOString()}`,
+        time: TimeId,
+        userId: UserInfoIdFromDb,
+        companyTin: CompanyTin,
+        companyName: CompanyName,
+        basketIdWeight: cart.cart,
+        note: Notes,
+        timenow: `${
+          date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+        }`,
+      };
+  
+      const response = await fetch('https://gazar.am/api/orderCreate', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      // Check if the response is successful
+      if (response.ok) {
+        const data = await response.json(); // Convert response to JSON
+        dispatch(resetCart())
+        navigation.navigate('SuccessOrder');
+        // console.log('Order created successfully:', data);
+      } else {
+        // If response is not successful, log the error status
+        console.error('Error creating order:', response.status);
+      }
     } catch (error) {
-        // Catch any errors that occur during the fetch request
-        console.error('Error creating order:', error);
+      // Catch any errors that occur during the fetch request
+      console.error('Error creating order:', error);
     }
-};
+  };
 
   const renderOrderSummary = () => {
     return (
@@ -145,7 +176,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
         }}
       >
         <components.ContainerItem
-          title={t("MyOrder")}
+          title={t('MyOrder')}
           price={`${subtotal} ֏`}
           titleStyle={{
             // ...theme.fonts.H4,
@@ -212,14 +243,14 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
         >
           <components.InputField
             label={t('Name')}
-            placeholder='Callie Mosley'
+            placeholder={t('NamePlaceholder')}
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setUsername(text)}
             check={false}
           />
           <components.InputField
             label={t('Surname')}
-            placeholder='Callie Mosley'
+            placeholder={t('SurnamePlaceholder')}
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setSurname(text)}
             check={false}
@@ -263,27 +294,27 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                   lineHeight: 12 * 1.7,
                 }}
               >
-                {t("Phone")}
+                {t('Phone')}
               </Text>
             </View>
           </View>
           <components.InputField
             label={t('Shipping')}
-            placeholder='Street, building, apartment'
+            placeholder={t('ShippingPlaceholder')}
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setShippingAddress(text)}
             check={false}
           />
           <components.InputField
             label={t('CompanyName')}
-            placeholder='Weflex'
+            placeholder='Company LLC'
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setCompanyName(text)}
             check={false}
           />
           <components.InputField
             label={t('CompanyTin')}
-            placeholder='3452532'
+            placeholder='0000000'
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setCompanyTin(text)}
             check={false}
@@ -329,12 +360,17 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             >
               {timeData &&
                 timeData?.map((item: any, i: number) => {
+                  console.log('====================================');
+                  console.log(item);
+                  console.log('====================================');
                   if (i < 4) {
                     return (
                       <>
                         <Text
                           onPress={() => {
-                            setTimeId(item.id)
+                            if(item.active){
+                              setTimeId(item.id);
+                            }
                           }}
                           key={i}
                           style={{
@@ -344,12 +380,12 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                             borderWidth: 1,
                             paddingVertical: 10,
                             paddingHorizontal: 20,
-                            borderColor: '#DBE9F5',
+                            borderColor: TimeId == item.id && item.active ? theme.colors.gazarGreenColor : '#DBE9F5',
                             justifyContent: 'center',
                             flexDirection: 'row',
                             width: '45%',
                             alignItems: 'flex-start',
-                            textAlign: 'center',
+                            textAlign: 'center'
                           }}
                         >
                           {item.timeStart}:00 - {item.timeEnd}:00
@@ -360,9 +396,8 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                 })}
               <Text
                 onPress={() => {
-                  console.log('====================================');
-                  console.log(timeData && timeData[4]?.id);
-                  console.log('====================================');
+                  if(timeData && timeData[4]?.id)
+                    setTimeId(timeData[4]?.id);
                 }}
                 style={{
                   fontSize: 16,
@@ -371,7 +406,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                   borderWidth: 1,
                   paddingVertical: 10,
                   paddingHorizontal: 20,
-                  borderColor: '#DBE9F5',
+                  borderColor: timeData && TimeId == timeData[4]?.id ? theme.colors.gazarGreenColor : '#DBE9F5',
                   flexDirection: 'row',
                   width: '100%',
                   justifyContent: 'center',
@@ -469,7 +504,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                 color: theme.colors.mainColor,
               }}
             >
-              {t("PaymentMethod")}
+              {t('PaymentMethod')}
             </text.H5>
           </View>
           <Text
@@ -496,7 +531,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
         }}
         onPress={() => {
           // navigation.navigate('OrderSuccessful');
-          CreateOrder()
+          CreateOrder();
           //navigation.navigate('OrderFailed');
         }}
       />
@@ -531,7 +566,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
               marginHorizontal: 20,
             }}
           >
-            {t("ChoosePaymentMethod")}
+            {t('ChoosePaymentMethod')}
           </Text>
           {payments.map((item, index) => {
             return (

@@ -33,4 +33,5 @@ export type RootStackParamList = {
   Shop: {products?: ProductType[]; title?: string};
   Categories: undefined;
   TopCategories: undefined;
+  SuccessOrder:undefined
 };

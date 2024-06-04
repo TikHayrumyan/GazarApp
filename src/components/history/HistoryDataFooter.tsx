@@ -16,7 +16,7 @@ const HistoryDataFooter: React.FC<Props> = ({version}): JSX.Element => {
   if (version === 1) {
     return (
       <Button
-        title='track order'
+        title='repeat Order'
         containerStyle={{
           marginTop: 10,
           marginBottom: 20,
