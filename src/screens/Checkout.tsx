@@ -1,6 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
-import {View, Text, TouchableOpacity, ScrollView, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  Linking,
+} from 'react-native';
 import {text} from '../text';
 import {svg} from '../assets/svg';
 import {theme} from '../constants';
@@ -14,17 +21,16 @@ import Button from '../components/buttons/Button';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { resetCart } from '../store/slices/cartSlice';
-import { setScreen } from '../store/slices/tabSlice';
+import {resetCart} from '../store/slices/cartSlice';
+import {setScreen} from '../store/slices/tabSlice';
 
 const Checkout = ({route}: {route: any}): JSX.Element => {
   const {t} = useTranslation();
- 
 
   const payments = [
     {
       id: 1,
-      type: 'Card',
+      type: 'BANK',
       name: `${t('Card')}`,
     },
     {
@@ -73,14 +79,13 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
   const [UserInfo, setUserInfo] = useState<any>(null);
   const [UserInfoIdFromDb, setUserInfoIdFromDb] = useState<any>(null);
   const dispatch = useAppDispatch();
- 
- 
+  
   const _retrieveData = async () => {
     try {
       const asyncUser = await AsyncStorage.getItem('user');
       const asyncUserId = await AsyncStorage.getItem('userDbId');
       if (asyncUser !== null && asyncUserId !== null) {
-        setUserInfoIdFromDb(JSON.parse(asyncUserId))
+        setUserInfoIdFromDb(JSON.parse(asyncUserId));
         setUserInfo(JSON.parse(asyncUser));
       }
     } catch (error) {
@@ -141,7 +146,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
           date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
         }`,
       };
-  
+
       const response = await fetch('https://gazar.am/api/orderCreate', {
         method: 'POST',
         headers: {
@@ -154,9 +159,14 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
       // Check if the response is successful
       if (response.ok) {
         const data = await response.json(); // Convert response to JSON
-        dispatch(resetCart())
-        navigation.navigate('SuccessOrder');
-        // console.log('Order created successfully:', data);
+
+        if (data.formUrl) {
+          Linking.openURL(data.formUrl);
+          console.log('Order created successfully:', data.formUrl);
+        } else {
+          dispatch(resetCart());
+          navigation.navigate('SuccessOrder');
+        }
       } else {
         // If response is not successful, log the error status
         console.error('Error creating order:', response.status);
@@ -360,15 +370,12 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             >
               {timeData &&
                 timeData?.map((item: any, i: number) => {
-                  console.log('====================================');
-                  console.log(item);
-                  console.log('====================================');
                   if (i < 4) {
                     return (
                       <>
                         <Text
                           onPress={() => {
-                            if(item.active){
+                            if (item.active) {
                               setTimeId(item.id);
                             }
                           }}
@@ -380,12 +387,15 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                             borderWidth: 1,
                             paddingVertical: 10,
                             paddingHorizontal: 20,
-                            borderColor: TimeId == item.id && item.active ? theme.colors.gazarGreenColor : '#DBE9F5',
+                            borderColor:
+                              TimeId == item.id && item.active
+                                ? theme.colors.gazarGreenColor
+                                : '#DBE9F5',
                             justifyContent: 'center',
                             flexDirection: 'row',
                             width: '45%',
                             alignItems: 'flex-start',
-                            textAlign: 'center'
+                            textAlign: 'center',
                           }}
                         >
                           {item.timeStart}:00 - {item.timeEnd}:00
@@ -396,8 +406,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                 })}
               <Text
                 onPress={() => {
-                  if(timeData && timeData[4]?.id)
-                    setTimeId(timeData[4]?.id);
+                  if (timeData && timeData[4]?.id) setTimeId(timeData[4]?.id);
                 }}
                 style={{
                   fontSize: 16,
@@ -406,7 +415,10 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                   borderWidth: 1,
                   paddingVertical: 10,
                   paddingHorizontal: 20,
-                  borderColor: timeData && TimeId == timeData[4]?.id ? theme.colors.gazarGreenColor : '#DBE9F5',
+                  borderColor:
+                    timeData && TimeId == timeData[4]?.id
+                      ? theme.colors.gazarGreenColor
+                      : '#DBE9F5',
                   flexDirection: 'row',
                   width: '100%',
                   justifyContent: 'center',
@@ -525,13 +537,14 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
   const renderButton = () => {
     return (
       <components.Button
-        title={t('ConfirmOrder')}
+        title={subtotal > 5000 ? t('ConfirmOrder') : t("moreFiveThousand")}
         containerStyle={{
           margin: 20,
         }}
         onPress={() => {
           // navigation.navigate('OrderSuccessful');
-          CreateOrder();
+          // subtotal > 5000 &&
+           CreateOrder();
           //navigation.navigate('OrderFailed');
         }}
       />
@@ -645,7 +658,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
     >
       {renderHeader()}
       {renderContent()}
-      {renderButton()}
+      { renderButton()}
       {renderPaymentModal()}
     </components.SmartView>
   );

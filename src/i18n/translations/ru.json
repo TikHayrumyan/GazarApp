@@ -34,6 +34,7 @@
     "CompanyName":"Название компании",
     "CompanyTin":"ИНН компании",
     "Notes":"Заметки",
-    "ConfirmOrder":"Подтвердите заказ"
+    "ConfirmOrder":"Подтвердите заказ",
+    "moreFiveThousand": "минимальный заказ 5000 AMD"
 
 }

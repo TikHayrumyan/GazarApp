@@ -35,5 +35,6 @@
     "CompanyTin":"Կազմակերպության ՀՎՀՀ",
     "Notes":"Նշումներ",
     "ConfirmOrder":"Հաստատել պատվերը",
-    "goToHomePage": "Գլխավոր"
+    "goToHomePage": "Գլխավոր",
+    "moreFiveThousand": "Պատվերը պետք է գերազանցի 5000 դր․"
 }
