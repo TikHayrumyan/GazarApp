@@ -11,7 +11,6 @@ import {
 import {text} from '../text';
 import {svg} from '../assets/svg';
 import {theme} from '../constants';
-// import {payments} from '../constants';
 import {addresses} from '../constants';
 import {useAppDispatch, useAppSelector} from '../hooks';
 import {components} from '../components';
@@ -57,9 +56,9 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
 
   const navigation = useAppNavigation();
   const date = new Date();
+  
   const [shippingModal, setShippingModal] = useState(false);
   const [paymentModal, setPaymentModal] = useState(false);
-  // const [address, setAddress] = useState(addresses[0].address);
   const [payment, setPayment] = useState(payments[0].type);
   const [username, setUsername] = useState<string>('');
   const [surname, setSurname] = useState<string>('');
@@ -75,7 +74,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
   const subtotal = useAppSelector((state) => state.cart.total)?.toFixed(2);
   const discount = useAppSelector((state) => state.cart.discount)?.toFixed(2);
   const [timeData, settimeData] = useState<any[]>();
-  const [TimeId, setTimeId] = useState<any[]>();
+  const [TimeId, setTimeId] = useState<any>();
   const [UserInfo, setUserInfo] = useState<any>(null);
   const [UserInfoIdFromDb, setUserInfoIdFromDb] = useState<any>(null);
   const dispatch = useAppDispatch();
@@ -123,6 +122,17 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
     hideDatePicker();
   };
 
+  const currentTime = new Date();
+
+  // Filter time slots to exclude past times
+  const availableTimeSlots = timeData?.filter(item => {
+    // const [startHour] = item?.timeStart.split(':').map(Number);
+    const slotDate = new Date(selectedDate);
+    // slotDate.setHours(startHour);
+    
+    return slotDate > currentTime;
+  });
+  
   const renderHeader = () => {
     return <components.Header title='Checkout' goBack={true} />;
   };
@@ -187,14 +197,12 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
       >
         <components.ContainerItem
           title={t('MyOrder')}
-          price={`${subtotal} ֏`}
+          price={`${TimeId > 4 ? +subtotal + 1000 : subtotal} ֏`}
           titleStyle={{
-            // ...theme.fonts.H4,
             color: theme.colors.mainColor,
             textTransform: 'capitalize',
           }}
           priceStyle={{
-            // ...theme.fonts.H4,
             color: theme.colors.mainColor,
           }}
           containerStyle={{
@@ -226,7 +234,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
         )}
         <components.ContainerItem
           title={t('delivery')}
-          price={`${delivery} ֏`}
+          price={`${TimeId > 4 ? 1000 : delivery} ֏`}
           containerStyle={{
             marginBottom: 0,
           }}
@@ -280,7 +288,6 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
               }}
               initialCountry={'am'}
               textStyle={{
-                // ...theme.fonts.DMSans_400Regular,
                 fontSize: 16,
                 color: theme.colors.black,
               }}
@@ -297,7 +304,6 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             >
               <Text
                 style={{
-                  // ...theme.fonts.DMSans_500Medium,
                   fontSize: 12,
                   textTransform: 'uppercase',
                   color: theme.colors.gazarMainText,
@@ -336,7 +342,6 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             onChangeText={(text: string) => setNotes(text)}
             check={false}
           />
-          {/* ?.toLocaleDateString() */}
           <Text
             style={{
               fontSize: 18,
@@ -349,7 +354,6 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
               justifyContent: 'center',
               flexDirection: 'row',
               alignItems: 'center',
-              // textAlign:"center"
             }}
             onPress={showDatePicker}
           >
@@ -357,7 +361,6 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
               ? selectedDate.toLocaleDateString('hy-hy', options as any)
               : 'No date selected'}
           </Text>
-
           <View style={{display: 'flex', flexDirection: 'column'}}>
             <View
               style={{
@@ -368,42 +371,43 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                 justifyContent: 'space-between',
               }}
             >
-              {timeData &&
-                timeData?.map((item: any, i: number) => {
+              {availableTimeSlots &&
+                availableTimeSlots.map((item: any, i: number) => {
+
                   if (i < 4) {
                     return (
-                      <>
-                        <Text
-                          onPress={() => {
-                            if (item.active) {
-                              setTimeId(item.id);
-                            }
-                          }}
-                          key={i}
-                          style={{
-                            fontSize: 16,
-                            fontWeight: 'normal',
-                            marginBottom: 20,
-                            borderWidth: 1,
-                            paddingVertical: 10,
-                            paddingHorizontal: 20,
-                            borderColor:
-                              TimeId == item.id && item.active
-                                ? theme.colors.gazarGreenColor
-                                : '#DBE9F5',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            width: '45%',
-                            alignItems: 'flex-start',
-                            textAlign: 'center',
-                          }}
-                        >
-                          {item.timeStart}:00 - {item.timeEnd}:00
-                        </Text>
-                      </>
+                      <Text
+                        onPress={() => {
+                          if (item.active) {
+                            setTimeId(item.id);
+                          }
+                        }}
+                        key={i}
+                        style={{
+                          fontSize: 16,
+                          fontWeight: 'normal',
+                          marginBottom: 20,
+                          borderWidth: 1,
+                          paddingVertical: 10,
+                          paddingHorizontal: 20,
+                          borderColor:
+                            TimeId == item.id && item.active
+                              ? theme.colors.gazarGreenColor
+                              : '#DBE9F5',
+                          justifyContent: 'center',
+                          flexDirection: 'row',
+                          width: '45%',
+                          alignItems: 'flex-start',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {item.timeStart}:00 - {item.timeEnd}:00
+                      </Text>
                     );
                   }
                 })}
+              {availableTimeSlots && availableTimeSlots.length ? 
+              <>
               <Text
                 onPress={() => {
                   if (timeData && timeData[4]?.id) setTimeId(timeData[4]?.id);
@@ -429,6 +433,27 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                 {timeData &&
                   timeData[4]?.name + ' +' + ' ' + timeData[4]?.price + ' AMD'}
               </Text>
+              </>: <Text 
+                 style={{
+                  fontSize: 16,
+                  fontWeight: 'normal',
+                  marginBottom: 20,
+                  borderWidth: 1,
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  borderColor:
+                    timeData && TimeId == timeData[4]?.id
+                      ? theme.colors.gazarGreenColor
+                      : '#DBE9F5',
+                  flexDirection: 'row',
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'flex-start',
+                  textAlign: 'center',
+                }}
+              >{t("notAvailableTime")} </Text>
+              }
+             
             </View>
           </View>
           <DateTimePickerModal
@@ -437,11 +462,13 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             mode='date'
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
+            minimumDate={new Date()} // Disable past dates
           />
         </View>
       </>
     );
   };
+
   const renderShippingDetails = () => {
     return (
       <TouchableOpacity
@@ -475,7 +502,6 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
           </View>
           <Text
             style={{
-              // ...theme.fonts.DMSans_400Regular,
               fontSize: 12,
               color: theme.colors.textColor,
             }}
@@ -521,7 +547,6 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
           </View>
           <Text
             style={{
-              // ...theme.fonts.DMSans_400Regular,
               fontSize: 12,
               color: theme.colors.textColor,
             }}
@@ -542,10 +567,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
           margin: 20,
         }}
         onPress={() => {
-          // navigation.navigate('OrderSuccessful');
-          // subtotal > 5000 &&
-           CreateOrder();
-          //navigation.navigate('OrderFailed');
+          CreateOrder();
         }}
       />
     );
@@ -572,7 +594,6 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
         >
           <Text
             style={{
-              // ...theme.fonts.H4,
               color: theme.colors.mainColor,
               textTransform: 'capitalize',
               marginBottom: 15,

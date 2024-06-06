@@ -1,6 +1,6 @@
 import {BannerType, CarouselType, ProductType} from '../types';
 import Images from '../assets/Images';
-import {svg} from '../../src/assets/svg'
+import {svg} from '../../src/assets/svg';
 import {theme} from './theme';
 
 const history = [
@@ -107,7 +107,7 @@ const notifications = [
 const onboardingData = [
   {
     id: 1,
-    title: 'Welcome\nto Comet!',
+    title: 'Welcome\nto Gazar!',
     description: 'Labore sunt culpa excepteur\nculpa occaecat ex nisi mollit.',
     image: Images.Onboarding1,
     color: theme.colors.white,

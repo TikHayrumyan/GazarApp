@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Comet",
-    "slug": "Comet",
-    "scheme":"Comet",
+    "name": "Gazar",
+    "slug": "Gazar",
+    "scheme": "Gazar",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tikhayrumyan.comet",
+      "bundleIdentifier": "com.tikhayrumyan.gazar",
       "infoPlist": {
         "CFBundleURLTypes": [
           {
@@ -33,7 +33,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.tikhayrumyan.comet"
+      "package": "com.tikhayrumyan.gazar"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -41,10 +41,27 @@
     },
     "extra": {
       "clerkPublishableKey": "pk_test_ZGlyZWN0LXF1ZXR6YWwtNDIuY2xlcmsuYWNjb3VudHMuZGV2JA",
+      "oneSignalAppId": "d42a63fc-b88b-44fc-952e-8420bce38d74",
       "eas": {
-        "projectId": "3ac0d9a9-a570-4d49-874f-a46c669597ee"
-      },
-      "oneSignalAppId": "d42a63fc-b88b-44fc-952e-8420bce38d74"
+        "build": {
+          "experimental": {
+            "ios": {
+              "appExtensions": [
+                {
+                  "targetName": "OneSignalNotificationServiceExtension",
+                  "bundleIdentifier": "com.tikhayrumyan.gazar.OneSignalNotificationServiceExtension",
+                  "entitlements": {
+                    "com.apple.security.application-groups": [
+                      "group.com.tikhayrumyan.gazar.onesignal"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "projectId": "e1e287ac-fb2b-49dd-aece-1be067550026"
+      }
     },
     "plugins": [
       "expo-localization",

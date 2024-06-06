@@ -1,4 +1,4 @@
-package com.tikhayrumyan.comet;
+package com.tikhayrumyan.gazar;
 
 import android.app.Application;
 import android.content.res.Configuration;

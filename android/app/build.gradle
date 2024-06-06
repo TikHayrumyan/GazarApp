@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.tikhayrumyan.comet'
+    namespace 'com.tikhayrumyan.gazar'
     defaultConfig {
-        applicationId 'com.tikhayrumyan.comet'
+        applicationId 'com.tikhayrumyan.gazar'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -35,6 +35,7 @@
     "CompanyTin":"ИНН компании",
     "Notes":"Заметки",
     "ConfirmOrder":"Подтвердите заказ",
-    "moreFiveThousand": "минимальный заказ 5000 AMD"
+    "moreFiveThousand": "минимальный заказ 5000 AMD",
+    "notAvailableTime": "Нет свободного времени"
 
 }

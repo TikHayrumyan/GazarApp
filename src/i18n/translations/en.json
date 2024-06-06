@@ -35,7 +35,8 @@
     "CompanyTin":"Company Tin",
     "Notes":"Notes",
     "ConfirmOrder":"Confirm Order",
-    "moreFiveThousand": "Minimum order amount is 5000 AMD"
+    "moreFiveThousand": "Minimum order amount is 5000 AMD",
+    "notAvailableTime": "No Available Time"
     
 
 }

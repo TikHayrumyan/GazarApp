@@ -16,17 +16,7 @@ import i18n from 'i18next';
 import {useTranslation, initReactI18next} from 'react-i18next';
 import {en, ru, am} from './src/i18n/translations';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
-// import { LinkingOptions } from '@react-navigation/native';
 
-// const linking: LinkingOptions<any> = {
-//   prefixes: ['Comet://'],
-//   config: {
-//     screens: {
-//       Home: "",
-//       Details: 'gazar/:app',
-//     },
-//   },
-// };
 
 const resources = {
   en: {
@@ -74,7 +64,7 @@ i18n
       <components.StatusBar />
       <Provider store={store}>
         <PersistGate loading={<components.Loader />} persistor={persistor}>
-          <NavigationContainer >
+          <NavigationContainer>
             <StackNavigator />
           </NavigationContainer>
         </PersistGate>

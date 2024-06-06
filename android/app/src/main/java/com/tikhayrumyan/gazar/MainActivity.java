@@ -1,4 +1,4 @@
-package com.tikhayrumyan.comet;
+package com.tikhayrumyan.gazar;
 
 import android.os.Build;
 import android.os.Bundle;
