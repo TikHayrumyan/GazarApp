@@ -130,7 +130,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
     const slotDate = new Date(selectedDate);
     // slotDate.setHours(startHour);
     
-    return slotDate > currentTime;
+    return slotDate >= currentTime;
   });
   
   const renderHeader = () => {
