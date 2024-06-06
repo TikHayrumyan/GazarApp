@@ -49,14 +49,6 @@ const OrderHistory: React.FC = (): JSX.Element => {
   }, []);
 
 
-  // if (loading) {
-  //   return (
-  //     <View style={styles.loader}>
-  //       <ActivityIndicator size="large" color="#0000ff" />
-  //     </View>
-  //   );
-  // }
- 
 
   const renderHeader: () => JSX.Element = () => {
     return <components.Header goBack={true} title='Order history' />;

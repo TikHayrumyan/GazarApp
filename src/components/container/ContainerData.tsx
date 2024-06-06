@@ -6,9 +6,10 @@ import ContainerLine from './ContainerLine';
 import ContainerItem from './ContainerItem';
 import {theme} from '../../constants';
 import Button from '../buttons/Button';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppNavigation} from '../../hooks';
 import {AddToBasket, resetCart} from '../../store/slices/cartSlice';
 import {useTranslation} from 'react-i18next';
+import {setScreen} from '../../store/slices/tabSlice';
 
 type Props = {
   type: string;
@@ -19,47 +20,34 @@ const ContainerData: React.FC<Props> = ({type, data}): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const {t, i18n} = useTranslation();
   const [repeatData, setRepeatData] = useState<any[]>([]);
+  const navigation = useAppNavigation();
 
   const repeatOrder = async (data: any) => {
-    try {
-      for (let index = 0; index < data.productsOrder.length; index++) {
-        const item = data.productsOrder[index];
-        if (item.gzProductId) {
-          const response = await fetch(
-            `https://gazar.am/api/products?product=${
-              item.gzProductId
-            }&lan=${i18n.language.toLocaleUpperCase()}`,
-          );
-          const res = await response.json();
-          if (res) {
-            // setRepeatData((prevData) => [...prevData, res]);
-            //  dispatch(AddToBasket(res));
-
-            let xyz = {
-              GzCategory: res.GzCategory,
-              discount: res.discount,
-              discountActive: res.discountActive,
-              discountType: res.discountType,
-              gzProductDetails: res.gzProductDetails,
-              id: res.id,
-              imageLink: res.imageLink,
-              maxLimit: res.maxLimit,
-              minLimit: res.minLimit,
-              price: res.price,
-              quantity: item.count,
-              slug: res.slug,
-              tags: res.tags,
-              unit: res.unit,
-              weight: res.weight,
-            };
-            // dispatch(resetCart())
-            dispatch(AddToBasket(xyz));
-          }
-        }
-      }
-    } catch (error) {
-      console.error(error);
+    if (data.productsOrder) {
+      data.productsOrder.map((item: any, i: any) => {
+        dispatch(
+          AddToBasket({
+            // GzCategory: res.GzCategory,
+            discount: item.discount,
+            discountActive: item.GzProduct.discountActive,
+            discountType: item.GzProduct.discountType,
+            gzProductDetails: item.GzProduct.gzProductDetails,
+            id: item.GzProduct.id,
+            imageLink: item.GzProduct.imageLink,
+            maxLimit: item.GzProduct.maxLimit,
+            minLimit: item.GzProduct.minLimit,
+            price: item.GzProduct.price,
+            quantity: item.count,
+            slug: item.GzProduct.slug,
+            tags: item.GzProduct.tags,
+            unit: item.GzProduct.unit,
+            weight: item.GzProduct.weight,
+          }),
+        );
+      });
     }
+    dispatch(setScreen('Order'));
+    navigation.navigate('TabNavigator');
   };
 
   if (type === 'history') {
