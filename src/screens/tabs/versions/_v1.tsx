@@ -77,7 +77,6 @@ const Home: React.FC = (): JSX.Element => {
   }, [category]);
 
   const renderBestSellers = useCallback(() => {
-    console.log(bestSeller);
     
     if (bestSeller) {
       return (

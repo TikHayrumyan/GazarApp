@@ -195,6 +195,7 @@ const Shop = ({
         horizontal={false}
         contentContainerStyle={{
           paddingHorizontal: 20,
+          paddingBottom:"20%"
         }}
       />
     );

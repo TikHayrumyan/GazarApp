@@ -24,6 +24,7 @@ const Order: React.FC = (): JSX.Element => {
     return (
       <View style={{marginLeft: 20}}>
         {cart?.map((item: any, index: number, array: any[]) => {
+          
           const lastElement = index === array?.length - 1;
           return (
             <components.OrderItem

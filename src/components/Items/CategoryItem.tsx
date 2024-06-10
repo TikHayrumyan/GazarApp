@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Text, TouchableOpacity, ImageBackground, StyleSheet, View } from 'react-native';
+import { Text, TouchableOpacity, ImageBackground, StyleSheet, View, Dimensions } from 'react-native';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 import { useTranslation } from 'react-i18next';
 import { useAppNavigation } from '../../hooks';
@@ -7,6 +7,7 @@ import QuantityBadge from '../badges/QuantityBadge';
 import { theme } from '../../constants';
 import { productsData } from '../../constants/constants';
 
+const { width, height } = Dimensions.get('window');
 type Props = {
   item: any;
   version: number;
@@ -212,8 +213,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   version3Container: {
-    width: 150,
-    height: 180,
+    width: width * 0.4,
+    height: height * 0.20,
     margin: '5%',
     marginBottom: 10,
     flexDirection: 'column',
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
   },
   version3ImageBackground: {
     backgroundColor: '#f2fce4',
-    height: 110,
+    height: height * 0.12,
     width: 'auto',
     marginTop: 40,
   },

@@ -1,7 +1,14 @@
-import {View, Text} from 'react-native';
+import { Text, Dimensions } from 'react-native';
 import React from 'react';
+import { theme } from '../constants';
 
-import {theme} from '../constants';
+const { width } = Dimensions.get('window');
+
+// Function to calculate responsive font size
+const getResponsiveFontSize = (fontSize: number) => {
+  const scaleFactor = width / 375; // 375 is a common base width for design (e.g., iPhone 6/7/8)
+  return fontSize * scaleFactor;
+};
 
 type Props = {
   children: React.ReactNode;
@@ -9,13 +16,13 @@ type Props = {
   numberOfLines?: number;
 };
 
-const H2: React.FC<Props> = ({children, style, numberOfLines}): JSX.Element => {
+const H2: React.FC<Props> = ({ children, style, numberOfLines }): JSX.Element => {
   return (
     <Text
       style={{
         // ...theme.fonts.Inter_700Bold,
-        fontSize: 22,
-        lineHeight: 22 * 1.4,
+        fontSize: getResponsiveFontSize(22),
+        lineHeight: getResponsiveFontSize(22) * 1.4,
         color: theme.colors.mainColor,
         textTransform: 'capitalize',
         ...style,

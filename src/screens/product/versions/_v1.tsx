@@ -12,7 +12,9 @@ const _v1: React.FC<Props> = ({ item, id }): JSX.Element => {
   const [SingleProduct, setSingleProduct] = useState<any>();
   const [DataCategory, setDataCategory] = useState<any>();
   const { t, i18n } = useTranslation();
-
+  
+  
+  
   const GetSingleProduct = useCallback(async () => {
     try {
       const response = await fetch(

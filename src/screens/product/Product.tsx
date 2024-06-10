@@ -15,7 +15,7 @@ const version: number = 1;
 
 const Product: React.FC<any> = ({route}): JSX.Element => {
   const {item,id} = route?.params;
-    
+  
   const renderHeader = () => {
     return (
       <components.Header

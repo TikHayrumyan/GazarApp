@@ -76,7 +76,7 @@ const SignIn: React.FC = () => {
   
   React.useEffect(() => {
     _retrieveData();
-  }, []);
+  }, [user]);
   React.useEffect(() => {
     if (response?.type === 'success') {
       setAccessToken(response.authentication?.accessToken as any);

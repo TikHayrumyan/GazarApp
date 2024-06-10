@@ -36,6 +36,7 @@ const ShopItem: React.FC<Props> = ({
       );
       const res = await response.json();
       if (res) {
+       
         navigation.navigate('Product', {
           item: {
             ...res,
@@ -101,6 +102,7 @@ const ShopItem: React.FC<Props> = ({
           // dispatch(resetCart())
           // console.log(item);
         }}
+      
       />
     </TouchableOpacity>
   );
