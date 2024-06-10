@@ -143,12 +143,15 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
 
   const availableTimeSlots = useMemo(() => {
     const currentTime = new Date();
+    const dateMinus30Minutes = new Date(currentTime.getTime() + 30 * 60000);
+
     return timeData?.filter((item) => {
       if (typeof item.timeStart !== 'number') return false;
       const slotDate = new Date(selectedDate);
       slotDate.setHours(item.timeStart);
-      const timeDifference = slotDate.getTime() - currentTime.getTime();
-      return slotDate > currentTime && timeDifference > 1800000; // 30 minutes in milliseconds
+      console.log(currentTime)
+      console.log(dateMinus30Minutes)
+      return slotDate > dateMinus30Minutes;
     });
   }, [timeData, selectedDate]);
 
