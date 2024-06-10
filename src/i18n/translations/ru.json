@@ -37,6 +37,7 @@
     "ConfirmOrder":"Подтвердите заказ",
     "moreFiveThousand": "минимальный заказ 5000 AMD",
     "notAvailableTime": "Нет свободного времени",
-    "orderHistory": "История заказов"
-
+    "orderHistory": "История заказов",
+    "myAddress" : "Мои адреса",
+    "Checkout": "Оплата"
 }

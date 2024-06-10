@@ -140,19 +140,26 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
 
   // Filter time slots to exclude past times
   // console.log(timeData);
-  
+
   const availableTimeSlots = useMemo(() => {
     const currentTime = new Date();
     return timeData?.filter((item) => {
       if (typeof item.timeStart !== 'number') return false;
       const slotDate = new Date(selectedDate);
       slotDate.setHours(item.timeStart);
-      return slotDate > currentTime;
+      const timeDifference = slotDate.getTime() - currentTime.getTime();
+      return slotDate > currentTime && timeDifference > 1800000; // 30 minutes in milliseconds
     });
   }, [timeData, selectedDate]);
-  
+
   const renderHeader = () => {
-    return <components.Header title='Checkout' goBack={true} />;
+    return (
+      <components.Header
+        title={t('Checkout')}
+        goBack={true}
+        burgerMenu={false}
+      />
+    );
   };
 
   const CreateOrder = async () => {
@@ -190,7 +197,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
 
         if (data.formUrl) {
           Linking.openURL(data.formUrl);
-          console.log('Order created successfully:', data.formUrl);
+          // console.log('Order created successfully:', data.formUrl);
         } else {
           dispatch(resetCart());
           navigation.navigate('SuccessOrder');
@@ -267,6 +274,15 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
     month: 'long',
     day: 'numeric',
   };
+  useEffect(() => {
+    if (UserInfoForInputs) {
+      setUsername(UserInfoForInputs?.name || '');
+      setSurname(UserInfoForInputs?.lastName || '');
+      setShippingAddress(UserInfoForInputs?.addressId[0]?.address || '');
+      setCompanyName(UserInfoForInputs?.companyName || '');
+      setCompanyTin(UserInfoForInputs?.Tin || '');
+    }
+  }, [UserInfoForInputs]);
 
   const RenderInputs = () => {
     return (
@@ -283,7 +299,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setUsername(text)}
             check={false}
-            value={UserInfoForInputs?.name ? UserInfoForInputs.name : ''}
+            value={username}
           />
           <components.InputField
             label={t('Surname')}
@@ -292,7 +308,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             onChangeText={(text: string) => setSurname(text)}
             check={false}
             value={
-              UserInfoForInputs?.lastName ? UserInfoForInputs.lastName : ''
+              surname
             }
           />
           <View
@@ -342,9 +358,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setShippingAddress(text)}
             check={false}
-            value={
-              UserInfoForInputs?.addressId[0]?.address ? UserInfoForInputs.addressId[0]?.address : ''
-            }
+            value={ShippingAddress}
           />
           <components.InputField
             label={t('CompanyName')}
@@ -353,7 +367,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             onChangeText={(text: string) => setCompanyName(text)}
             check={false}
             value={
-              UserInfoForInputs?.companyName ? UserInfoForInputs.companyName : ''
+             CompanyName
             }
           />
           <components.InputField
@@ -362,9 +376,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setCompanyTin(text)}
             check={false}
-            value={
-              UserInfoForInputs?.Tin ? UserInfoForInputs.Tin : ''
-            }
+            value={CompanyTin}
           />
           <components.InputField
             label={t('Notes')}
@@ -507,50 +519,50 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
     );
   };
 
-  const renderShippingDetails = () => {
-    return (
-      <TouchableOpacity
-        style={{
-          marginLeft: 20,
-          marginBottom: 14,
-          borderTopWidth: 1,
-          borderBottomWidth: 1,
-          borderLeftWidth: 1,
-          borderColor: theme.colors.lightBlue,
-          borderRadius: 5,
-          padding: 20,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-        onPress={() => {
-          setShippingModal(true);
-        }}
-      >
-        <View style={{flex: 1}}>
-          <View style={{flexDirection: 'row', marginBottom: 10}}>
-            <svg.ShippingMapSvg />
-            <text.H5
-              style={{
-                marginLeft: 10,
-                color: theme.colors.mainColor,
-              }}
-            >
-              Shipping details
-            </text.H5>
-          </View>
-          <Text
-            style={{
-              fontSize: 12,
-              color: theme.colors.textColor,
-            }}
-          >
-            8000 S Kirkland Ave, Chicago, IL 6065...
-          </Text>
-        </View>
-        <svg.SmallArrowSvg />
-      </TouchableOpacity>
-    );
-  };
+  // const renderShippingDetails = () => {
+  //   return (
+  //     <TouchableOpacity
+  //       style={{
+  //         marginLeft: 20,
+  //         marginBottom: 14,
+  //         borderTopWidth: 1,
+  //         borderBottomWidth: 1,
+  //         borderLeftWidth: 1,
+  //         borderColor: theme.colors.lightBlue,
+  //         borderRadius: 5,
+  //         padding: 20,
+  //         flexDirection: 'row',
+  //         alignItems: 'center',
+  //       }}
+  //       onPress={() => {
+  //         setShippingModal(true);
+  //       }}
+  //     >
+  //       <View style={{flex: 1}}>
+  //         <View style={{flexDirection: 'row', marginBottom: 10}}>
+  //           <svg.ShippingMapSvg />
+  //           <text.H5
+  //             style={{
+  //               marginLeft: 10,
+  //               color: theme.colors.mainColor,
+  //             }}
+  //           >
+  //             Shipping details
+  //           </text.H5>
+  //         </View>
+  //         <Text
+  //           style={{
+  //             fontSize: 12,
+  //             color: theme.colors.textColor,
+  //           }}
+  //         >
+  //           8000 S Kirkland Ave, Chicago, IL 6065...
+  //         </Text>
+  //       </View>
+  //       <svg.SmallArrowSvg />
+  //     </TouchableOpacity>
+  //   );
+  // };
 
   const renderPaymentMethod = () => {
     return (

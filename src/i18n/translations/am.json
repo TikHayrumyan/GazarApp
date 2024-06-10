@@ -38,5 +38,7 @@
     "goToHomePage": "Գլխավոր",
     "moreFiveThousand": "Պատվերը պետք է գերազանցի 5000 դր․",
     "notAvailableTime": "չկա Հասանելի ժամ",
-    "orderHistory": "Պատվերների պատմություն"
+    "orderHistory": "Պատվերների պատմություն",
+    "myAddress" : "Իմ հասցեները",
+    "Checkout": "Վճարում"
 }

@@ -131,7 +131,7 @@ const BurgerMenuModal: React.FC<Props> = ({
   const renderFooter = () => {
     return (
       <View style={{paddingLeft: 20}}>
-        <BurgerMenuItem
+        {/* <BurgerMenuItem
           version={2}
           icon={<svg.BellSvg />}
           title={t('Notifications')}
@@ -141,8 +141,8 @@ const BurgerMenuModal: React.FC<Props> = ({
             setShowModal(false);
             navigation.navigate('Notifications');
           }}
-        />
-        <BurgerMenuItem
+        /> */}
+        {/* <BurgerMenuItem
           version={2}
           icon={<svg.HelpCircleSvg />}
           title={t("Support")}
@@ -150,7 +150,7 @@ const BurgerMenuModal: React.FC<Props> = ({
           onPress={() => {
             console.log('Support');
           }}
-        />
+        /> */}
         <BurgerMenuItem
           version={2}
           icon={<svg.LogOutSvg />}

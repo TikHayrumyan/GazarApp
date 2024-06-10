@@ -37,6 +37,8 @@
     "ConfirmOrder":"Confirm Order",
     "moreFiveThousand": "Minimum order amount is 5000 AMD",
     "notAvailableTime": "No Available Time",
-    "orderHistory": "Order history"
+    "orderHistory": "Order history",
+    "myAddress" : "My address",
+    "Checkout": "Checkout"
 
 }

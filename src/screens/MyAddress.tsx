@@ -6,6 +6,7 @@ import { components } from '../components';
 import { useAppNavigation } from '../hooks';
 import { theme } from '../constants';
 import { setScreen } from '../store/slices/tabSlice';
+import { useTranslation } from 'react-i18next';
 
 type UserInfo = {
   addressId: { address: string }[];
@@ -15,7 +16,7 @@ const MyAddress: React.FC = (): JSX.Element => {
   const navigation = useAppNavigation();
   const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-
+  const {t} = useTranslation()
   const retrieveData = useCallback(async () => {
     try {
       const asyncUserId = await AsyncStorage.getItem('userDbId');
@@ -38,7 +39,7 @@ const MyAddress: React.FC = (): JSX.Element => {
   }, [retrieveData]);
 
   const renderHeader = () => (
-    <components.Header goBack={true} title="My address" />
+    <components.Header goBack={true} title={t('myAddress')} />
   );
 
   const renderContent = () => (

@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { useRoute } from '@react-navigation/native';
+import React, {useState, useMemo, useCallback} from 'react';
+import {useRoute} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -7,15 +7,17 @@ import {
   TextInput,
   StyleSheet,
   ViewStyle,
+  Image,
 } from 'react-native';
 import GoBack from './GoBack';
-import { svg } from '../../assets/svg';
-import { theme } from '../../constants';
+import {svg} from '../../assets/svg';
+import {theme} from '../../constants';
 import BurgerMenuModal from '../modal/BurgerMenuModal';
-import { useAppSelector, useAppDispatch, useAppNavigation } from '../../hooks';
-import { setQuantityWantAdd, setSearch } from '../../store/slices/productSlice';
-import { setScreen } from '../../store/slices/tabSlice';
-
+import {useAppSelector, useAppDispatch, useAppNavigation} from '../../hooks';
+import {setQuantityWantAdd, setSearch} from '../../store/slices/productSlice';
+import {setScreen} from '../../store/slices/tabSlice';
+import {SvgUri} from 'react-native-svg';
+import LogoSvg from '../../assets/svg/LogoSvg';
 type Props = {
   title?: string;
   goBack?: boolean;
@@ -38,101 +40,126 @@ const Header: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
   const route = useRoute();
-  
+
   const [showModal, setShowModal] = useState(false);
   const [searchText, setSearchText] = useState('');
 
   const cart = useAppSelector((state) => state.cart.list);
   const total = useAppSelector((state) => state.cart.total)?.toFixed(0);
 
-  const containerStyle: ViewStyle = useMemo(() => ({
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.colors.white,
-    height: 90,
-    borderBottomWidth: border ? 1 : 0,
-    borderBottomColor: border ? theme.colors.lightBlue : 'transparent',
-  }), [border]);
+  const containerStyle: ViewStyle = useMemo(
+    () => ({
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: theme.colors.white,
+      height: 90,
+      borderBottomWidth: border ? 1 : 0,
+      borderBottomColor: border ? theme.colors.lightBlue : 'transparent',
+    }),
+    [border],
+  );
 
   const basketOnPress = useCallback(() => {
     dispatch(setScreen('Order'));
     navigation.navigate('TabNavigator');
   }, [dispatch, navigation]);
 
-  const renderGoBack = useCallback(() => (
-    goBack && (
-      <View style={styles.goBack}>
-        <GoBack
-          onPress={() => {
-            navigation.goBack();
-            isHeaderProduct && dispatch(setQuantityWantAdd(0));
-          }}
-        />
-      </View>
-    )
-  ), [goBack, navigation, dispatch, isHeaderProduct]);
-
-  const renderTitle = useCallback(() => (
-    title && (
-      <Text style={styles.title} numberOfLines={1}>
-        {title}
-      </Text>
-    )
-  ), [title]);
-
-  const renderBasket = useCallback(() => (
-    basket && (
-      <TouchableOpacity onPress={basketOnPress} style={styles.basket}>
-        <View style={styles.basketAmount}>
-          <Text style={styles.basketText}>
-            {`${total} ֏`}
-          </Text>
+  const renderGoBack = useCallback(
+    () =>
+      goBack && (
+        <View style={styles.goBack}>
+          <GoBack
+            onPress={() => {
+              navigation.goBack();
+              isHeaderProduct && dispatch(setQuantityWantAdd(0));
+            }}
+          />
         </View>
-        <svg.ShoppingCart />
-      </TouchableOpacity>
-    )
-  ), [basket, basketOnPress, total]);
+      ),
+    [goBack, navigation, dispatch, isHeaderProduct],
+  );
 
-  const renderBurgerMenu = useCallback(() => (
-    burgerMenu && (
-      <TouchableOpacity
-        style={styles.burgerMenu}
-        onPress={() => setShowModal(true)}
-      >
-        <svg.BurgerMenuSvg />
-      </TouchableOpacity>
-    )
-  ), [burgerMenu]);
+  const renderTitle = useCallback(
+    () =>
+      title && (
+        <Text style={styles.title} numberOfLines={1}>
+          {title}
+        </Text>
+      ),
+    [title],
+  );
 
-  const renderSearch = useCallback(() => (
-    search && (
-      <View style={styles.frameSearch}>
-        <View style={styles.searchIcon}>
-          <svg.SearchSvg color={theme.colors.black} />
+  const renderBasket = useCallback(
+    () =>
+      basket && (
+        <TouchableOpacity onPress={basketOnPress} style={styles.basket}>
+          <View style={styles.basketAmount}>
+            <Text style={styles.basketText}>{`${total} ֏`}</Text>
+          </View>
+          <svg.ShoppingCart />
+        </TouchableOpacity>
+      ),
+    [basket, basketOnPress, total],
+  );
+
+  const renderBurgerMenu = useCallback(
+    () =>
+      burgerMenu && (
+        <TouchableOpacity
+          style={styles.burgerMenu}
+          onPress={() => setShowModal(true)}
+        >
+          <svg.BurgerMenuSvg />
+        </TouchableOpacity>
+      ),
+    [burgerMenu],
+  );
+
+  const renderSearch = useCallback(
+    () =>
+      search && (
+        <View style={styles.frameSearch}>
+          <View style={styles.searchIcon}>
+            <svg.SearchSvg color={theme.colors.black} />
+          </View>
+          <TextInput
+            placeholder='Search'
+            placeholderTextColor={theme.colors.black}
+            onChangeText={setSearchText}
+            value={searchText}
+            style={styles.searchInput}
+            onBlur={() => dispatch(setSearch(searchText))}
+          />
         </View>
-        <TextInput
-          placeholder='Search'
-          placeholderTextColor={theme.colors.black}
-          onChangeText={setSearchText}
-          value={searchText}
-          style={styles.searchInput}
-          onBlur={() => dispatch(setSearch(searchText))}
-        />
-      </View>
-    )
-  ), [search, searchText, dispatch]);
+      ),
+    [search, searchText, dispatch],
+  );
 
-  const renderBurgerContacts = useCallback(() => (
-    <BurgerMenuModal showModal={showModal} setShowModal={setShowModal} />
-  ), [showModal]);
-
+  const renderBurgerContacts = useCallback(
+    () => <BurgerMenuModal showModal={showModal} setShowModal={setShowModal} />,
+    [showModal],
+  );
+  const renderLogo = useCallback(
+    () => (
+      burgerMenu && <>
+        <TouchableOpacity
+          style={styles.burgerMenu}
+          // onPress={() => setShowModal(true)}
+        >
+          <LogoSvg style={styles.logo} />
+        </TouchableOpacity>
+      </>
+    ),
+    [],
+  );
   return (
     <View style={containerStyle}>
       {renderGoBack()}
       {renderTitle()}
       {renderBasket()}
-      {renderBurgerMenu()}
+      {/* {renderBurgerMenu()} */}
+      {renderLogo()}
       {renderSearch()}
       {renderBurgerContacts()}
     </View>
@@ -167,7 +194,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.black,
+    backgroundColor: '#253d4e',
     marginRight: 10,
   },
   basketText: {
@@ -201,6 +228,10 @@ const styles = StyleSheet.create({
     flex: 1,
     color: theme.colors.black,
     height: 40,
+  },
+  logo: {
+    width: 66,
+    height: 58,
   },
 });
 

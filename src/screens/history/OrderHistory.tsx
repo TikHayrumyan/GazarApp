@@ -28,12 +28,11 @@ const OrderHistory: React.FC = (): JSX.Element => {
     const asyncUserId = await AsyncStorage.getItem('userDbId');
     
     if (asyncUserId) {
-      // console.log(`https://gazar.am/api/orders?id=${JSON.parse(asyncUserId)}`);
       
       try {
         const response = await fetch(
-          // `https://gazar.am/api/orders?id=${JSON.parse(asyncUserId)}`,
-          `https://gazar.am/api/orders?id=clpigx6by00007z0v5mh1ikh9`,
+          `https://gazar.am/api/orders?id=${JSON.parse(asyncUserId)}`,
+          
           
         );
         const json = await response.json();

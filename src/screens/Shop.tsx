@@ -57,10 +57,12 @@ const Shop = ({
   };
 
   const GetProductData = async () => {
+    // console.log(id);
+    
     try {
       const response = await fetch(
         `https://gazar.am/api/products?category=${
-          id ? id[0] : selectedCategory?.id ? selectedCategory?.id : 0
+          selectedCategory?.id ? selectedCategory?.id : 0
         }&lan=${i18n.language.toLocaleUpperCase()}`,
       );
       const res = await response.json();
@@ -78,7 +80,7 @@ const Shop = ({
       console.error(error);
     }
   };
-
+ 
   useEffect(() => {
     GetProductData();
     getCategory();
