@@ -105,7 +105,7 @@ const BurgerMenuModal: React.FC<Props> = ({
       );
     }
   };
-
+  
   const renderMenu = () => {
     return (
       <View style={{paddingHorizontal: 20}}>
@@ -119,8 +119,8 @@ const BurgerMenuModal: React.FC<Props> = ({
           onPress={() => {
             setShowModal(false);
             navigation.navigate('Shop', {
-              title: 'Shop',
-              products: productsData.filter((item: any) => item?.is_sale - 1),
+              title: t("Shop"),
+              // products: productsData.filter((item: any) => {item?.is_sale - 1}),
             });
           }}
         />

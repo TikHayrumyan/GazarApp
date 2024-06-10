@@ -4,7 +4,6 @@ import {components} from '../../components';
 import {listCategories, categories} from '../../constants/constants';
 import {theme} from '../../constants';
 import {useAppSelector} from '../../hooks';
-import {CategoryType} from '../../types';
 
 const Categories: React.FC = (): JSX.Element => {
   const [selectedCategory, setSelectedCategory] = useState(listCategories[1]);

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Modal from 'react-native-modal';
 import {
   View,
@@ -56,13 +56,12 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
 
   const navigation = useAppNavigation();
   const date = new Date();
-  
+
   const [shippingModal, setShippingModal] = useState(false);
   const [paymentModal, setPaymentModal] = useState(false);
   const [payment, setPayment] = useState(payments[0].type);
   const [username, setUsername] = useState<string>('');
   const [surname, setSurname] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
   const [ShippingAddress, setShippingAddress] = useState<string>('');
   const [CompanyName, setCompanyName] = useState<string>('');
   const [CompanyTin, setCompanyTin] = useState<string>('');
@@ -78,7 +77,8 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
   const [UserInfo, setUserInfo] = useState<any>(null);
   const [UserInfoIdFromDb, setUserInfoIdFromDb] = useState<any>(null);
   const dispatch = useAppDispatch();
-  
+  const [UserInfoForInputs, setUserInfoForInputs] = useState<any>(null);
+  const [phone, setPhone] = useState<string | number>();
   const _retrieveData = async () => {
     try {
       const asyncUser = await AsyncStorage.getItem('user');
@@ -89,6 +89,20 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
       }
     } catch (error) {
       // Error retrieving data
+    }
+    try {
+      const asyncUserId = await AsyncStorage.getItem('userDbId');
+      if (asyncUserId) {
+        const response = await fetch(
+          `https://gazar.am/api/user?id=${JSON.parse(asyncUserId)}`,
+        );
+        const res = await response.json();
+        if (res) {
+          setUserInfoForInputs(res);
+        }
+      }
+    } catch (error) {
+      console.error('Error retrieving data', error);
     }
   };
   useEffect(() => {
@@ -125,18 +139,22 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
   const currentTime = new Date();
 
   // Filter time slots to exclude past times
-  const availableTimeSlots = timeData?.filter(item => {
-    // const [startHour] = item?.timeStart.split(':').map(Number);
-    const slotDate = new Date(selectedDate);
-    // slotDate.setHours(startHour);
-    
-    return slotDate >= currentTime;
-  });
+  // console.log(timeData);
+  
+  const availableTimeSlots = useMemo(() => {
+    const currentTime = new Date();
+    return timeData?.filter((item) => {
+      if (typeof item.timeStart !== 'number') return false;
+      const slotDate = new Date(selectedDate);
+      slotDate.setHours(item.timeStart);
+      return slotDate > currentTime;
+    });
+  }, [timeData, selectedDate]);
   
   const renderHeader = () => {
     return <components.Header title='Checkout' goBack={true} />;
   };
-  
+
   const CreateOrder = async () => {
     try {
       const data = {
@@ -265,6 +283,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setUsername(text)}
             check={false}
+            value={UserInfoForInputs?.name ? UserInfoForInputs.name : ''}
           />
           <components.InputField
             label={t('Surname')}
@@ -272,6 +291,9 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setSurname(text)}
             check={false}
+            value={
+              UserInfoForInputs?.lastName ? UserInfoForInputs.lastName : ''
+            }
           />
           <View
             style={{
@@ -320,6 +342,9 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setShippingAddress(text)}
             check={false}
+            value={
+              UserInfoForInputs?.addressId[0]?.address ? UserInfoForInputs.addressId[0]?.address : ''
+            }
           />
           <components.InputField
             label={t('CompanyName')}
@@ -327,6 +352,9 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setCompanyName(text)}
             check={false}
+            value={
+              UserInfoForInputs?.companyName ? UserInfoForInputs.companyName : ''
+            }
           />
           <components.InputField
             label={t('CompanyTin')}
@@ -334,6 +362,9 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setCompanyTin(text)}
             check={false}
+            value={
+              UserInfoForInputs?.Tin ? UserInfoForInputs.Tin : ''
+            }
           />
           <components.InputField
             label={t('Notes')}
@@ -373,7 +404,6 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
             >
               {availableTimeSlots &&
                 availableTimeSlots.map((item: any, i: number) => {
-
                   if (i < 4) {
                     return (
                       <Text
@@ -406,54 +436,62 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                     );
                   }
                 })}
-              {availableTimeSlots && availableTimeSlots.length ? 
-              <>
-              <Text
-                onPress={() => {
-                  if (timeData && timeData[4]?.id) setTimeId(timeData[4]?.id);
-                }}
-                style={{
-                  fontSize: 16,
-                  fontWeight: 'normal',
-                  marginBottom: 20,
-                  borderWidth: 1,
-                  paddingVertical: 10,
-                  paddingHorizontal: 20,
-                  borderColor:
-                    timeData && TimeId == timeData[4]?.id
-                      ? theme.colors.gazarGreenColor
-                      : '#DBE9F5',
-                  flexDirection: 'row',
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'flex-start',
-                  textAlign: 'center',
-                }}
-              >
-                {timeData &&
-                  timeData[4]?.name + ' +' + ' ' + timeData[4]?.price + ' AMD'}
-              </Text>
-              </>: <Text 
-                 style={{
-                  fontSize: 16,
-                  fontWeight: 'normal',
-                  marginBottom: 20,
-                  borderWidth: 1,
-                  paddingVertical: 10,
-                  paddingHorizontal: 20,
-                  borderColor:
-                    timeData && TimeId == timeData[4]?.id
-                      ? theme.colors.gazarGreenColor
-                      : '#DBE9F5',
-                  flexDirection: 'row',
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'flex-start',
-                  textAlign: 'center',
-                }}
-              >{t("notAvailableTime")} </Text>
-              }
-             
+              {availableTimeSlots && availableTimeSlots.length ? (
+                <>
+                  <Text
+                    onPress={() => {
+                      if (timeData && timeData[4]?.id)
+                        setTimeId(timeData[4]?.id);
+                    }}
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'normal',
+                      marginBottom: 20,
+                      borderWidth: 1,
+                      paddingVertical: 10,
+                      paddingHorizontal: 20,
+                      borderColor:
+                        timeData && TimeId == timeData[4]?.id
+                          ? theme.colors.gazarGreenColor
+                          : '#DBE9F5',
+                      flexDirection: 'row',
+                      width: '100%',
+                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {timeData &&
+                      timeData[4]?.name +
+                        ' +' +
+                        ' ' +
+                        timeData[4]?.price +
+                        ' AMD'}
+                  </Text>
+                </>
+              ) : (
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 'normal',
+                    marginBottom: 20,
+                    borderWidth: 1,
+                    paddingVertical: 10,
+                    paddingHorizontal: 20,
+                    borderColor:
+                      timeData && TimeId == timeData[4]?.id
+                        ? theme.colors.gazarGreenColor
+                        : '#DBE9F5',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    textAlign: 'center',
+                  }}
+                >
+                  {t('notAvailableTime')}{' '}
+                </Text>
+              )}
             </View>
           </View>
           <DateTimePickerModal
@@ -562,7 +600,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
   const renderButton = () => {
     return (
       <components.Button
-        title={subtotal > 5000 ? t('ConfirmOrder') : t("moreFiveThousand")}
+        title={subtotal > 5000 ? t('ConfirmOrder') : t('moreFiveThousand')}
         containerStyle={{
           margin: 20,
         }}
@@ -679,7 +717,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
     >
       {renderHeader()}
       {renderContent()}
-      { renderButton()}
+      {renderButton()}
       {renderPaymentModal()}
     </components.SmartView>
   );

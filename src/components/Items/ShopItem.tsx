@@ -7,40 +7,47 @@ import ProductPrice from '../product/ProductPrice';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import OrderCounter from '../order/OrderCounter';
 import Button from '../buttons/Button';
-import { useDispatch } from 'react-redux';
-import { AddToBasket, resetCart } from '../../store/slices/cartSlice';
-import { useTranslation } from 'react-i18next';
+import {useDispatch} from 'react-redux';
+import {AddToBasket, resetCart} from '../../store/slices/cartSlice';
+import {useTranslation} from 'react-i18next';
 
-type Props = {item: any, index: number, increment: (index: number)=>void, decrement: (index: number)=>void};
+type Props = {
+  item: any;
+  index: number;
+  increment: (index: number) => void;
+  decrement: (index: number) => void;
+};
 
-const ShopItem: React.FC<Props> = ({item, index, increment, decrement}): JSX.Element => {
+const ShopItem: React.FC<Props> = ({
+  item,
+  index,
+  increment,
+  decrement,
+}): JSX.Element => {
   const navigation = useAppNavigation();
   const blockWidth = responsiveWidth(50) - 20 - 7.5;
-  const dispatch = useDispatch()
-  const {t,i18n} = useTranslation()
+  const dispatch = useDispatch();
+  const {t, i18n} = useTranslation();
   
   const GetSingleProduct = async (id: number) => {
-
     try {
       const response = await fetch(
-        `https://gazar.am/api/products?product=${id}&lan=${(i18n.language).toLocaleUpperCase()}`,
+        `https://gazar.am/api/products?product=${id}&lan=${i18n.language.toLocaleUpperCase()}`,
       );
       const res = await response.json();
       if (res) {
- 
         navigation.navigate('Product', {
           item: {
             ...res,
             quantity: 1,
-            id
+            id,
           },
         });
       }
     } catch (error) {
       console.error(error);
     }
-  }
-
+  };
 
   return (
     <TouchableOpacity
@@ -50,10 +57,9 @@ const ShopItem: React.FC<Props> = ({item, index, increment, decrement}): JSX.Ele
         marginBottom: 20,
         borderRadius: 5,
         padding: 4,
-
       }}
       onPress={() => {
-        GetSingleProduct(item.id)
+        GetSingleProduct(item.id);
       }}
     >
       <ImageBackground
@@ -64,18 +70,13 @@ const ShopItem: React.FC<Props> = ({item, index, increment, decrement}): JSX.Ele
           // marginBottom: 5,
           alignItems: 'flex-end',
           // objectFit: 'contain',
-          
         }}
         imageStyle={{
           // borderRadius: 5,
           // backgroundColor: transparent,
           objectFit: 'contain',
-
         }}
-        
-      >
-      
-      </ImageBackground>
+      ></ImageBackground>
       <ProductName
         item={item}
         // style={{marginBottom: 3, color: theme.colors.mainColor}}
@@ -86,15 +87,21 @@ const ShopItem: React.FC<Props> = ({item, index, increment, decrement}): JSX.Ele
         item={item}
         styleText={{color: theme.colors.mainColor}}
       />
-      <OrderCounter item={item} index={index} increment={increment} decrement={decrement} />
-      <Button title={t("addToBasket")} transparent onPress={() => {
-       
-        dispatch(AddToBasket(item))
-        // dispatch(resetCart())
-        console.log(item);
-        
-        
-      }}/>
+      <OrderCounter
+        item={item}
+        index={index}
+        increment={increment}
+        decrement={decrement}
+      />
+      <Button
+        title={t('addToBasket')}
+        transparent
+        onPress={() => {
+          dispatch(AddToBasket(item));
+          // dispatch(resetCart())
+          // console.log(item);
+        }}
+      />
     </TouchableOpacity>
   );
 };

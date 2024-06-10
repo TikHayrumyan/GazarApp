@@ -18,7 +18,8 @@ import { useTranslation } from 'react-i18next';
 const version: number = 1;
 
 const OrderHistory: React.FC = (): JSX.Element => {
- 
+  const {t} = useTranslation()
+  
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   // console.log(data[1].productsOrder);
@@ -51,7 +52,7 @@ const OrderHistory: React.FC = (): JSX.Element => {
 
 
   const renderHeader: () => JSX.Element = () => {
-    return <components.Header goBack={true} title='Order history' />;
+    return <components.Header goBack={true} title={t("orderHistory")} />;
   };
 
   const renderContent: () => JSX.Element = () => {

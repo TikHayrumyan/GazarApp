@@ -36,7 +36,7 @@
     "Notes":"Notes",
     "ConfirmOrder":"Confirm Order",
     "moreFiveThousand": "Minimum order amount is 5000 AMD",
-    "notAvailableTime": "No Available Time"
-    
+    "notAvailableTime": "No Available Time",
+    "orderHistory": "Order history"
 
 }

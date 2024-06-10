@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import Modal from 'react-native-modal';
 import {View, FlatList, TouchableOpacity, ScrollView} from 'react-native';
 
@@ -6,12 +6,8 @@ import {text} from '../text';
 import {theme, sortingBy} from '../constants';
 import {svg} from '../assets/svg';
 import {components} from '../components';
-import type {RootStackParamList} from '../types';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {productsData} from '../constants/constants';
-import { useTranslation } from 'react-i18next';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Shop'>;
+import {useTranslation} from 'react-i18next';
 
 enum TypeSort {
   BestMatch = 1,
@@ -35,11 +31,21 @@ const Shop = ({
   const [GetAllProducts, setGetAllProducts] = useState([]);
   const [DataCategory, setDataCategory] = useState<any>();
   const [selectedCategory, setSelectedCategory] = useState<any>();
-  const {t,i18n} = useTranslation()
+  const {t, i18n} = useTranslation();
+  let id = route?.params?.products?.filter((item: any) => {
+    if (typeof item == 'number') {
+      return item;
+    } else {
+      return item.id;
+    }
+  });
+
   
   const getCategory = async () => {
     try {
-      const response = await fetch(`https://gazar.am/api/category?lan=${(i18n.language).toLocaleUpperCase()}`);
+      const response = await fetch(
+        `https://gazar.am/api/category?lan=${i18n.language.toLocaleUpperCase()}`,
+      );
       const res = await response.json();
       if (res) {
         setDataCategory(res);
@@ -49,18 +55,13 @@ const Shop = ({
       console.error(error);
     }
   };
-  let id = route?.params?.products?.filter((item: any) => {
-    if (typeof item == 'number') {
-      return item;
-    }
-  });
 
   const GetProductData = async () => {
     try {
       const response = await fetch(
         `https://gazar.am/api/products?category=${
           id ? id[0] : selectedCategory?.id ? selectedCategory?.id : 0
-        }&lan=${(i18n.language).toLocaleUpperCase()}`,
+        }&lan=${i18n.language.toLocaleUpperCase()}`,
       );
       const res = await response.json();
       if (res) {
@@ -81,8 +82,9 @@ const Shop = ({
   useEffect(() => {
     GetProductData();
     getCategory();
-  }, [selectedCategory]);
-
+    
+  }, [selectedCategory,route?.params]);
+  
   useEffect(() => {
     sortProducts(sort);
   }, [sort]);
@@ -108,21 +110,27 @@ const Shop = ({
     setGetAllProducts(newListProducts);
   };
 
-  const increment = (index: number) => {
-    let temp: any = [...GetAllProducts];
-    if (temp[index].maxLimit > temp[index].quantity) {
-      temp[index].quantity++;
-      setGetAllProducts(temp);
-    }
-  };
+  const increment = useCallback(
+    (index: number) => {
+      let temp: any = [...GetAllProducts];
+      if (temp[index].maxLimit > temp[index].quantity) {
+        temp[index].quantity++;
+        setGetAllProducts(temp);
+      }
+    },
+    [GetAllProducts],
+  );
 
-  const decrement = (index: number) => {
-    let temp: any = [...GetAllProducts];
-    if (temp[index].minLimit < temp[index].quantity) {
-      temp[index].quantity--;
-      setGetAllProducts(temp);
-    }
-  };
+  const decrement = useCallback(
+    (index: number) => {
+      let temp: any = [...GetAllProducts];
+      if (temp[index].minLimit < temp[index].quantity) {
+        temp[index].quantity--;
+        setGetAllProducts(temp);
+      }
+    },
+    [GetAllProducts],
+  );
 
   const renderHeader = () => {
     return (
@@ -134,7 +142,7 @@ const Shop = ({
       />
     );
   };
-
+  
   const renderCategories_1 = () => {
     if (DataCategory) {
       return (
@@ -157,6 +165,7 @@ const Shop = ({
                   selectedCategory={selectedCategory}
                   setSelectedCategory={setSelectedCategory}
                   index={index}
+                  title={route?.params?.title}
                 />
               );
             })}
@@ -273,7 +282,7 @@ const Shop = ({
       containerStyle={{backgroundColor: theme.colors.imageBackground}}
     >
       {id ? id[0] && renderHeader() : null}
-      {route?.params.title == "Shop" && renderHeader()}
+      {route?.params?.title == t('Shop') && renderHeader()}
       {renderCategories_1()}
       {GetAllProducts && renderProducts()}
       {renderPopup()}
