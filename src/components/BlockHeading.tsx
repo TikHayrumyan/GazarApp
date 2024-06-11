@@ -17,7 +17,7 @@ const BlockHeading: React.FC<Props> = ({
   containerStyle,
   styleContent,
 }) => {
-  const {H3, T16, T14} = text;
+  const {H4, T16, T14} = text;
   const {t} = useTranslation()
   return (
     <View
@@ -29,7 +29,7 @@ const BlockHeading: React.FC<Props> = ({
         ...containerStyle,
       }}
     >
-      <H3 style={styleContent}>{title}</H3>
+      <H4 style={styleContent}>{title}</H4>
       <TouchableOpacity
         onPress={onPress}
         style={{flexDirection: 'row', alignItems: 'center'}}

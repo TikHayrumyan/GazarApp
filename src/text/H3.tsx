@@ -7,7 +7,7 @@ const { width } = Dimensions.get('window');
 
 // Function to calculate responsive font size
 const getResponsiveFontSize = (fontSize:any) => {
-  const scaleFactor = width / 385; // 375 is a common base width for design (e.g., iPhone 6/7/8)
+  const scaleFactor = width / 375; // 375 is a common base width for design (e.g., iPhone 6/7/8)
   return fontSize * scaleFactor;
 };
 type Props = {
