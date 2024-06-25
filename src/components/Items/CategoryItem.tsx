@@ -33,9 +33,11 @@ const CategoryItem: React.FC<Props> = ({
 
   const getCategoryName = () => {
     const language = i18n.language;
-    if (language === 'am') return item.gzCategoryDetails[2]?.name;
-    if (language === 'ru') return item.gzCategoryDetails[1]?.name;
-    return item.gzCategoryDetails[0]?.name;
+    console.log(item.gzCategoryDetails);
+
+    for(let { name, lan } of item.gzCategoryDetails)
+      if(lan.toLowerCase() == language)
+        return name;
   };
 
   const categoryName = useMemo(() => getCategoryName(), [i18n.language, item]);

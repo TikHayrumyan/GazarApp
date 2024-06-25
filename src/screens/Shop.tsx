@@ -56,6 +56,7 @@ const Shop = ({
     }
   };
 
+
   const GetProductData = async () => {
     // console.log(id);
     
