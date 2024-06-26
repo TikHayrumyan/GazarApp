@@ -39,6 +39,7 @@
     "notAvailableTime": "No Available Time",
     "orderHistory": "Order history",
     "myAddress" : "My address",
-    "Checkout": "Checkout"
+    "Checkout": "Checkout",
+    "fastDelivery": "Fast delivery"
 
 }

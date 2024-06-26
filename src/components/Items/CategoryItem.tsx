@@ -33,7 +33,6 @@ const CategoryItem: React.FC<Props> = ({
 
   const getCategoryName = () => {
     const language = i18n.language;
-    console.log(item.gzCategoryDetails);
 
     for(let { name, lan } of item.gzCategoryDetails)
       if(lan.toLowerCase() == language)

@@ -39,5 +39,6 @@
     "notAvailableTime": "Нет свободного времени",
     "orderHistory": "История заказов",
     "myAddress" : "Мои адреса",
-    "Checkout": "Оплата"
+    "Checkout": "Оплата",
+    "fastDelivery": "Быстрая доставка"
 }

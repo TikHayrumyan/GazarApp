@@ -298,7 +298,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
         >
           <components.InputField
             label={t('Name')}
-            placeholder={t('NamePlaceholder')}
+            placeholder={t('Name')}
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setUsername(text)}
             check={false}
@@ -306,7 +306,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
           />
           <components.InputField
             label={t('Surname')}
-            placeholder={t('SurnamePlaceholder')}
+            placeholder={t('Surname')}
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setSurname(text)}
             check={false}
@@ -357,7 +357,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
           </View>
           <components.InputField
             label={t('Shipping')}
-            placeholder={t('ShippingPlaceholder')}
+            placeholder={t('Shipping')}
             containerStyle={{marginBottom: 20}}
             onChangeText={(text: string) => setShippingAddress(text)}
             check={false}
@@ -477,7 +477,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
                     }}
                   >
                     {timeData &&
-                      timeData[4]?.name +
+                      timeData[4]?.name && t("fastDelivery")+
                         ' +' +
                         ' ' +
                         timeData[4]?.price +

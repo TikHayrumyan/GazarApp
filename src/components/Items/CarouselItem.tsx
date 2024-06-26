@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, ImageBackground} from 'react-native';
+import {View, ImageBackground,Text} from 'react-native';
 import {text} from '../../text';
 import {theme} from '../../constants';
 // import ShopNow from '../buttons/ShopNow';
@@ -35,9 +35,9 @@ const CarouselItem: React.FC<Props> = ({item, array, index}): JSX.Element => {
       resizeMode='cover'
     >
       <View >
-        <text.H1 style={{fontSize:20,color: theme.colors.gazarMainText,width:260, marginTop: 20, }}>
+        <Text style={{fontSize:20,color: theme.colors.gazarMainText,width:260, marginTop: 20 }}>
           {item.title}
-        </text.H1>
+        </Text>
         {item.description && <text.H1  style={{fontSize:13,height:"auto",color: theme.colors.gazarMainText}}>
           {item.description}
         </text.H1>}
