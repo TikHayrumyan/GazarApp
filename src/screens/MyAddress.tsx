@@ -42,24 +42,53 @@ const MyAddress: React.FC = (): JSX.Element => {
     <components.Header goBack={true} title={t('myAddress')} />
   );
 
-  const renderContent = () => (
-    <ScrollView contentContainerStyle={styles.contentContainer}>
-      {userInfo?.addressId?.map((item, index) => (
-        item.address && (
-          <TouchableOpacity
-            key={index}
-            style={styles.addressItem}
-          >
-            <View>
-              <Text style={styles.addressText} numberOfLines={1}>
-                {item.address}
-              </Text>
-            </View>
-          </TouchableOpacity>
+  const renderContent = () => {
+
+  
+    if(userInfo?.addressId){
+      return(
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+      
+        {
+        
+        userInfo?.addressId?.map((item, index) => {
+         
+          if(item.address){
+  
+            return(
+              
+                <TouchableOpacity
+                  key={index}
+                  style={styles.addressItem}
+                >
+                  <View>
+                    <Text style={styles.addressText} numberOfLines={1}>
+                      {item.address }
+                      
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              
+    
+            )
+          }
+          
+        }
         )
-      ))}
-    </ScrollView>
-  );
+        
+        }
+        
+      </ScrollView>
+      )
+    }else{
+      return(<ScrollView contentContainerStyle={styles.emptyContainer}>
+        <Text style={{fontSize:20}}>
+          {t('noAdress')}
+        </Text>
+
+      </ScrollView>)
+    }
+};
 
   // const renderButton = () => (
   //   <components.Button
@@ -104,6 +133,13 @@ const styles = StyleSheet.create({
   addButtonContainer: {
     padding: 20,
   },
+  emptyContainer:{
+    display:"flex",
+    width:"100%",
+    height:500,
+    alignItems:"center",
+    justifyContent:"center"
+  }
 });
 
 export default MyAddress;

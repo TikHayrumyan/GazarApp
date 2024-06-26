@@ -47,6 +47,7 @@ i18n
 
   
   OneSignal.initialize("d42a63fc-b88b-44fc-952e-8420bce38d74");
+  // OneSignal.initialize("93d7a707-9980-42d4-bb00-6fb1b930ca4d");
   // OneSignal.Debug.setLogLevel(LogLevel.Verbose);
   // OneSignal.Notifications.requestPermission(true);
 

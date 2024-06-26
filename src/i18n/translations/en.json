@@ -40,6 +40,11 @@
     "orderHistory": "Order history",
     "myAddress" : "My address",
     "Checkout": "Checkout",
-    "fastDelivery": "Fast delivery"
+    "fastDelivery": "Fast delivery",
+    "price":"Pricer",
+    "discount": "Discount",
+    "repeatOrder":"Repeat order",
+    "noAdress":"You have no any address",
+    "selectTime": "select the time"
 
 }

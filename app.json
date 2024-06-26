@@ -3,7 +3,7 @@
     "name": "Gazar",
     "slug": "Gazar",
     "scheme": "Gazar",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,6 +18,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.tikhayrumyan.gazar",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "We need access to your location to provide personalized recommendations and services based on your current location.",
         "CFBundleURLTypes": [

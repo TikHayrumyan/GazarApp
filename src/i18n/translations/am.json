@@ -41,5 +41,11 @@
     "orderHistory": "Պատվերների պատմություն",
     "myAddress" : "Իմ հասցեները",
     "Checkout": "Վճարում",
-    "fastDelivery": "Արագ առաքում"
+    "fastDelivery": "Արագ առաքում",
+    "price":"Գին",
+    "discount": "Զեղչ",
+    "repeatOrder":"Կրկնել պատվերը",
+    "noAdress":"Դուք հասցե չունեք",
+    "selectTime": "ընտրեք ժամը"
+
 }

@@ -106,7 +106,7 @@ const SignIn: React.FC = () => {
   }
 
   const renderHeader = () => {
-    return <components.Header goBack={true} />;
+    return <components.Header goBack={false} />;
   };
 
   const renderContent = () => {

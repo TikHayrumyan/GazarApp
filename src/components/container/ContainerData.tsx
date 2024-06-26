@@ -58,12 +58,12 @@ const ContainerData: React.FC<Props> = ({type, data}): JSX.Element | null => {
             return (
               <>
                 <ContainerItem
-                  title='Name'
+                  title={t('Name')}
                   price={`${item?.GzProduct?.name}`}
                 />
                 <ContainerLine />
                 <ContainerItem
-                  title='Price'
+                  title={t('price')}
                   price={`${item?.GzProduct?.price}֏`}
                   titleStyle={{
                     color: theme.colors.mainColor,
@@ -75,12 +75,12 @@ const ContainerData: React.FC<Props> = ({type, data}): JSX.Element | null => {
                     marginBottom: 0,
                   }}
                 />
-                <ContainerItem title='Discount' price={`${item?.discount}֏`} />
+                <ContainerItem title={t('discount')} price={`${item?.discount}֏`} />
               </>
             );
           })}
           <Button
-            title='repeat Order'
+            title={t('repeatOrder')}
             containerStyle={{
               marginTop: 10,
               marginBottom: 20,

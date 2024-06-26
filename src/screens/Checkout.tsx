@@ -522,51 +522,7 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
     );
   };
 
-  // const renderShippingDetails = () => {
-  //   return (
-  //     <TouchableOpacity
-  //       style={{
-  //         marginLeft: 20,
-  //         marginBottom: 14,
-  //         borderTopWidth: 1,
-  //         borderBottomWidth: 1,
-  //         borderLeftWidth: 1,
-  //         borderColor: theme.colors.lightBlue,
-  //         borderRadius: 5,
-  //         padding: 20,
-  //         flexDirection: 'row',
-  //         alignItems: 'center',
-  //       }}
-  //       onPress={() => {
-  //         setShippingModal(true);
-  //       }}
-  //     >
-  //       <View style={{flex: 1}}>
-  //         <View style={{flexDirection: 'row', marginBottom: 10}}>
-  //           <svg.ShippingMapSvg />
-  //           <text.H5
-  //             style={{
-  //               marginLeft: 10,
-  //               color: theme.colors.mainColor,
-  //             }}
-  //           >
-  //             Shipping details
-  //           </text.H5>
-  //         </View>
-  //         <Text
-  //           style={{
-  //             fontSize: 12,
-  //             color: theme.colors.textColor,
-  //           }}
-  //         >
-  //           8000 S Kirkland Ave, Chicago, IL 6065...
-  //         </Text>
-  //       </View>
-  //       <svg.SmallArrowSvg />
-  //     </TouchableOpacity>
-  //   );
-  // };
-
+  
   const renderPaymentMethod = () => {
     return (
       <TouchableOpacity
@@ -613,14 +569,19 @@ const Checkout = ({route}: {route: any}): JSX.Element => {
   };
 
   const renderButton = () => {
+    console.log(TimeId);
+    
     return (
       <components.Button
-        title={subtotal > 5000 ? t('ConfirmOrder') : t('moreFiveThousand')}
+        title={subtotal > 5000 && TimeId ? t('ConfirmOrder') : subtotal > 5000 && !TimeId ? t('selectTime') : t('moreFiveThousand')}
         containerStyle={{
           margin: 20,
         }}
         onPress={() => {
-          CreateOrder();
+          if(subtotal > 5000 && TimeId){
+
+            CreateOrder();
+          }
         }}
       />
     );

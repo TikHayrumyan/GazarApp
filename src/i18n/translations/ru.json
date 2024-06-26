@@ -40,5 +40,10 @@
     "orderHistory": "История заказов",
     "myAddress" : "Мои адреса",
     "Checkout": "Оплата",
-    "fastDelivery": "Быстрая доставка"
+    "fastDelivery": "Быстрая доставка",
+    "price":"Цена",
+    "discount": "Скидка",
+    "repeatOrder":"Повторите заказ",
+    "noAdress":"У вас нет никакого адреса",
+    "selectTime": "выберите время"
 }
